@@ -49,6 +49,8 @@ class MainApp:
         self.entry_password.pack()
         self.btn_login = ttk.Button(self.root, text="Login", command=self.proses_login_customer)
         self.btn_login.pack(pady=20)
+        self.btn_register = ttk.Button(self.root, text="Register", command=self.register_user)
+        self.btn_register.pack(pady=30)
 
     def proses_login_customer(self):
         email = self.entry_email.get()
@@ -86,6 +88,9 @@ class MainApp:
         ttk.Label(self.root, text="Password", font=("Helvetica", 14)).pack(pady=10)
         self.entry_password = ttk.Entry(self.root, show="*")
         self.entry_password.pack()
+        ttk.Label(self.root, text="Balance", font=("Helvetica", 14)).pack(pady=10)
+        self.entry_balance = ttk.Entry(self.root)
+        self.entry_balance.pack()
         self.btn_register = ttk.Button(self.root, text="Register", command=self.process_register)
         self.btn_register.pack(pady=20)
 
@@ -93,8 +98,8 @@ class MainApp:
         username = self.entry_username.get()
         email = self.entry_email.get()
         password = self.entry_password.get()
-        role = "user"  # Default role for regular users
-        balance = 0    # Default balance for new users
+        role = "customer"  # Default role for regular users
+        balance = self.entry_balance.get()    # Default balance for new users
 
         # Check if email already exists
         existed_email = user_services.getUserByEmail(email)
@@ -106,7 +111,7 @@ class MainApp:
         new_user = User(username, email, password, role, balance)
         new_user.register()
         messagebox.showinfo("Success", "Registration successful! Please log in.")
-        self.login_screen()
+        self.customer()
 
     def home_screen_admin(self):
         ttk.Label(self.root, text="Admin Dashboard", font=("Helvetica", 16)).pack(pady=20)
