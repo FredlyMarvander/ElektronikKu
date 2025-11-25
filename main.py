@@ -73,7 +73,41 @@ class MainApp:
             self.home_screen_admin()
         else:
             messagebox.showerror("Error", "Email or Password is Wrong")
-            
+    
+    def register_user(self):
+        self.clear_window()
+        ttk.Label(self.root, text="User Registration", font=("Helvetica", 16)).pack(pady=20)
+        ttk.Label(self.root, text="Username", font=("Helvetica", 14)).pack(pady=10)
+        self.entry_username = ttk.Entry(self.root)
+        self.entry_username.pack()
+        ttk.Label(self.root, text="Email", font=("Helvetica", 14)).pack(pady=10)
+        self.entry_email = ttk.Entry(self.root)
+        self.entry_email.pack()
+        ttk.Label(self.root, text="Password", font=("Helvetica", 14)).pack(pady=10)
+        self.entry_password = ttk.Entry(self.root, show="*")
+        self.entry_password.pack()
+        self.btn_register = ttk.Button(self.root, text="Register", command=self.process_register)
+        self.btn_register.pack(pady=20)
+
+    def process_register(self):
+        username = self.entry_username.get()
+        email = self.entry_email.get()
+        password = self.entry_password.get()
+        role = "user"  # Default role for regular users
+        balance = 0    # Default balance for new users
+
+        # Check if email already exists
+        existed_email = user_services.getUserByEmail(email)
+        if existed_email:
+            messagebox.showerror("Error", "Email already exists!")
+            return
+
+        # Create new user and register
+        new_user = User(username, email, password, role, balance)
+        new_user.register()
+        messagebox.showinfo("Success", "Registration successful! Please log in.")
+        self.login_screen()
+
     def home_screen_admin(self):
         ttk.Label(self.root, text="Admin Dashboard", font=("Helvetica", 16)).pack(pady=20)
         self.btn_logout = ttk.Button(self.root, text="Logout", command=self.logout)
