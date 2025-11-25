@@ -43,6 +43,25 @@ class UserService:
         
         else:
             return None
+        
+    def getUserByEmail(self, email):
+        query = "SELECT * FROM Users WHERE email = %s"
+        values = [email]
+        result = db_object.fetch_data(query, values)
+
+        if len(result) > 0:
+            row = result[0]
+    
+            
+            return row
+        
+        else:
+            return None
+        
+    def getCustomers(self):
+        query = "SELECT * FROM Users WHERE role = 'customer'"
+        result = db_object.fetch_data(query)
+        return result
     
         
 user_services = UserService()
