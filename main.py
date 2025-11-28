@@ -442,6 +442,7 @@ class MainApp(TKMT.ThemedTKinterFrame):
         ttk.Button(
             header_right,
             text="Cart",
+            command=self.view_cart
             
         ).pack(side=RIGHT, padx=10, pady=10)
 
@@ -514,9 +515,16 @@ class MainApp(TKMT.ThemedTKinterFrame):
 
 
             col += 1
-            if col == 7:
+            if col == 5:
                 col = 0
                 row += 1
+
+    def view_cart(self):
+        self.clear_window()
+        self.btn_back = ttk.Button(self.root, text="Back to Home", command=self.home_screen_customer)
+        self.btn_back.pack(pady=10)
+        self.fetch_cart = product_services.fetchCart(self.userId)
+        
 
     def create_product_card(self, parent, image_url, name, price):
         card = Frame(parent, bg="white", bd=1, relief=SOLID)
@@ -527,7 +535,7 @@ class MainApp(TKMT.ThemedTKinterFrame):
             img_data = response.content
 
             img = Image.open(BytesIO(img_data))
-            img = img.resize((150, 150))  # ukuran kartu
+            img = img.resize((220, 200))  # ukuran kartu
 
             photo = ImageTk.PhotoImage(img)
 
@@ -544,10 +552,13 @@ class MainApp(TKMT.ThemedTKinterFrame):
 
         Label(card, text=name, font=("Arial", 12, "bold"), bg="white").pack()
         Label(card, text=f"Rp {price:,}", fg="black", bg="white").pack()
+        self.btn_add_to_cart = ttk.Button(card, text="Add to Cart")
+        self.btn_add_to_cart.pack(pady=10)
 
         return card
 
 
+    
 
     def logout(self):
         self.clear_window()
