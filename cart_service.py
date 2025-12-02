@@ -90,5 +90,19 @@ class CartService:
         
         return None
     
+    def getAllCartsByUserId(self, userId):
+        query = """
+        SELECT * FROM Carts
+        WHERE userId = %s AND transactionDate IS NOT NULL
+        ORDER BY transactionDate DESC
+        """
+
+        val = (userId,)
+
+        result = db_object.fetch_data(query, val)
+
+        return result
+    
+
 
 cart_services = CartService()

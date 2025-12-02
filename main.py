@@ -13,71 +13,482 @@ from cart_service import cart_services
 from CartDetail import CartDetail
 from cart_detail_service import cart_detail_service
 
-# from ttkbootstrap import Style
 
 
 class MainApp():
     def __init__(self, root):
-        # self.style = Style(theme="cosmo")
-
-        # super().__init__("Elektronikku", theme="azure", mode="light")
         self.root = root
-        self.root.title("Elektronikku")
+        self.root.title("🛒 Elektronikku")
         self.root.state("zoomed")
-
-        # self.root.geometry("800x600")
+        self.root.configure(bg="#f0f0f0")
+        
+        # Color scheme
+        self.PRIMARY_COLOR = "#4A90E2"
+        self.SUCCESS_COLOR = "#52C41A"
+        self.DANGER_COLOR = "#F5222D"
+        self.WARNING_COLOR = "#FA8C16"
+        self.INFO_COLOR = "#1890FF"
+        self.DARK_COLOR = "#262626"
+        self.LIGHT_BG = "#FFFFFF"
+        self.GRAY_BG = "#F5F5F5"
+        self.TEXT_COLOR = "#333333"
+        self.SECONDARY_TEXT = "#8C8C8C"
+        
         self.home_screen()
 
     def home_screen(self):
-        ttk.Label(self.root, text="Welcome to Elektronikku", font=("Helvetica", 16)).pack(pady=20)
-        self.buttonAdmin = ttk.Button(self.root, text="Admin", command=self.admin)
-        self.buttonAdmin.pack()
-        self.buttonCustomer = ttk.Button(self.root, text="Customer", command=self.customer)
-        self.buttonCustomer.pack()
+        self.clear_window()
+        main_frame = Frame(self.root, bg=self.GRAY_BG)
+        main_frame.pack(fill=BOTH, expand=YES)
+        
+        # Header Section
+        header_frame = Frame(main_frame, bg="#4A70A9", height=100)
+        header_frame.pack(fill=X)
+        header_frame.pack_propagate(False)
+        
+        Label(
+            header_frame,
+            text="🛒 ELEKTRONIKKU",
+            font=("Arial", 36, "bold"),
+            bg="#4A70A9",
+            fg="white"
+        ).pack(pady=10)
+        
+        Label(
+            header_frame,
+            text="Your Trusted Electronics Marketplace",
+            font=("Arial", 14),
+            bg="#4A70A9",
+            fg="white"
+        ).pack()
+        
+        # Content Section
+        content_frame = Frame(main_frame, bg=self.GRAY_BG)
+        content_frame.pack(expand=YES, fill=BOTH, pady=80)
+        
+        # Welcome Text
+        Label(
+            content_frame,
+            text="Welcome! Please select your role",
+            font=("Arial", 18),
+            bg="#F9F8F6",
+            fg=self.TEXT_COLOR
+        ).pack(pady=(0, 40))
+        
+        # Button Container
+        button_frame = Frame(content_frame, bg=self.GRAY_BG)
+        button_frame.pack()
+        
+        # Admin Button
+        self.buttonAdmin = Button(
+            button_frame,
+            text="Admin Login",
+            font=("Arial", 16, "bold"),
+            bg="#4A70A9",
+            fg="white",
+            activebackground="#4A70A9",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            padx=40,
+            pady=20,
+            cursor="hand2",
+            command=self.admin
+        )
+        self.buttonAdmin.pack(pady=15)
+        self.buttonAdmin.bind("<Enter>", lambda e: e.widget.config(bg="#096DD9"))
+        self.buttonAdmin.bind("<Leave>", lambda e: e.widget.config(bg=self.INFO_COLOR))
+        
+        # Customer Button
+        self.buttonCustomer = Button(
+            button_frame,
+            text="Customer Login",
+            font=("Arial", 16, "bold"),
+            bg="#4A70A9",
+            fg="white",
+            activebackground="#4A70A9",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            padx=40,
+            pady=20,
+            cursor="hand2",
+            command=self.customer
+        )
+        self.buttonCustomer.pack(pady=15)
+        self.buttonCustomer.bind("<Enter>", lambda e: e.widget.config(bg="#389E0D"))
+        self.buttonCustomer.bind("<Leave>", lambda e: e.widget.config(bg=self.SUCCESS_COLOR))
 
     def admin(self):
         self.clear_window()
-        ttk.Label(self.root, text="Admin Login", font=("Helvetica", 16)).pack(pady=20)
-        ttk.Label(self.root, text="Email", font=("Helvetica", 16)).pack(pady=10)
-        self.entry_email = ttk.Entry(self.root)
-        self.entry_email.pack()
-        ttk.Label(self.root, text="Password", font=("Helvetica", 16)).pack(pady=10)
-        self.entry_password = ttk.Entry(self.root, show="*")
-        self.entry_password.pack()
-        self.btn_login = ttk.Button(self.root, text="Login", command=self.proses_login_admin)
-        self.btn_login.pack(pady=20)
+        
+        main_frame = Frame(self.root, bg=self.GRAY_BG)
+        main_frame.pack(fill=BOTH, expand=YES)
+        
+        # Header
+        header_frame = Frame(main_frame, bg="#4A70A9", height=100)
+        header_frame.pack(fill=X)
+        header_frame.pack_propagate(False)
+        
+        Label(
+            header_frame,
+            text="Admin Login",
+            font=("Arial", 28, "bold"),
+            bg="#4A70A9",
+            fg="white"
+        ).pack(pady=30)
+        
+        # Content
+        content_frame = Frame(main_frame, bg=self.LIGHT_BG, bd=0)
+        content_frame.pack(pady=60, padx=200)
+        
+        inner_frame = Frame(content_frame, bg=self.LIGHT_BG)
+        inner_frame.pack(padx=60, pady=40)
+        
+        # Email
+        Label(
+            inner_frame,
+            text="Email Address",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_email = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor=self.INFO_COLOR
+        )
+        self.entry_email.pack(fill=X, ipady=10, pady=(0, 20))
+        
+        # Password
+        Label(
+            inner_frame,
+            text="Password",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_password = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            show="●",
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor=self.INFO_COLOR
+        )
+        self.entry_password.pack(fill=X, ipady=10, pady=(0, 30))
+        
+        # Login Button
+        self.btn_login = Button(
+            inner_frame,
+            text="Login",
+            font=("Arial", 14, "bold"),
+            bg="#4A70A9",
+            fg="white",
+            activebackground="#4A70A9",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            cursor="hand2",
+            command=self.proses_login_admin
+        )
+        self.btn_login.pack(fill=X, ipady=12, pady=(0, 10))
+        self.btn_login.bind("<Enter>", lambda e: e.widget.config(bg="#096DD9"))
+        self.btn_login.bind("<Leave>", lambda e: e.widget.config(bg=self.INFO_COLOR))
+        
+        # Back Button
+        btn_back = Button(
+            inner_frame,
+            text="← Back",
+            font=("Arial", 12),
+            bg=self.LIGHT_BG,
+            fg=self.SECONDARY_TEXT,
+            activebackground=self.GRAY_BG,
+            relief=FLAT,
+            bd=1,
+            cursor="hand2",
+            command=self.home_screen
+        )
+        btn_back.pack(fill=X, ipady=8)
+        btn_back.bind("<Enter>", lambda e: e.widget.config(bg=self.GRAY_BG))
+        btn_back.bind("<Leave>", lambda e: e.widget.config(bg=self.LIGHT_BG))
 
     def customer(self):
         self.clear_window()
-        ttk.Label(self.root, text="Customer Login", font=("Helvetica", 16)).pack(pady=20)
-        ttk.Label(self.root, text="Email", font=("Helvetica", 16)).pack(pady=10)
-        self.entry_email = ttk.Entry(self.root)
-        self.entry_email.pack()
-        ttk.Label(self.root, text="Password", font=("Helvetica", 16)).pack(pady=10)
-        self.entry_password = ttk.Entry(self.root, show="*")
-        self.entry_password.pack()
-        self.btn_login = ttk.Button(self.root, text="Login", command=self.proses_login_customer)
-        self.btn_login.pack(pady=20)
-        self.btn_register = ttk.Button(self.root, text="Register", command=self.register_user)
-        self.btn_register.pack(pady=30)
+        
+        main_frame = Frame(self.root, bg=self.GRAY_BG)
+        main_frame.pack(fill=BOTH, expand=YES)
+        
+        # Header
+        header_frame = Frame(main_frame, bg="#4A70A9", height=100)
+        header_frame.pack(fill=X)
+        header_frame.pack_propagate(False)
+        
+        Label(
+            header_frame,
+            text="Customer Login",
+            font=("Arial", 28, "bold"),
+            bg="#4A70A9",
+            fg="white"
+        ).pack(pady=30)
+        
+        # Content
+        content_frame = Frame(main_frame, bg=self.LIGHT_BG, bd=0)
+        content_frame.pack(pady=60, padx=200)
+        
+        inner_frame = Frame(content_frame, bg=self.LIGHT_BG)
+        inner_frame.pack(padx=60, pady=40)
+        
+        # Email
+        Label(
+            inner_frame,
+            text="Email Address",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_email = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor="#4A70A9"
+        )
+        self.entry_email.pack(fill=X, ipady=10, pady=(0, 20))
+        
+        # Password
+        Label(
+            inner_frame,
+            text="Password",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_password = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            show="●",
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor="#4A70A9"
+        )
+        self.entry_password.pack(fill=X, ipady=10, pady=(0, 30))
+        
+        # Login Button
+        self.btn_login = Button(
+            inner_frame,
+            text="Login",
+            font=("Arial", 14, "bold"),
+            bg=self.SUCCESS_COLOR,
+            fg="white",
+            activebackground="#389E0D",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            cursor="hand2",
+            command=self.proses_login_customer
+        )
+        self.btn_login.pack(fill=X, ipady=12, pady=(0, 10))
+        self.btn_login.bind("<Enter>", lambda e: e.widget.config(bg="#389E0D"))
+        self.btn_login.bind("<Leave>", lambda e: e.widget.config(bg=self.SUCCESS_COLOR))
+        
+        # Register Button
+        self.btn_register = Button(
+            inner_frame,
+            text="Register",
+            font=("Arial", 12),
+            bg=self.LIGHT_BG,
+            fg=self.PRIMARY_COLOR,
+            activebackground=self.GRAY_BG,
+            relief=SOLID,
+            bd=1,
+            cursor="hand2",
+            command=self.register_user
+        )
+        self.btn_register.pack(fill=X, ipady=10, pady=(0, 10))
+        self.btn_register.bind("<Enter>", lambda e: e.widget.config(bg=self.GRAY_BG))
+        self.btn_register.bind("<Leave>", lambda e: e.widget.config(bg=self.LIGHT_BG))
+        
+        # Back Button
+        btn_back = Button(
+            inner_frame,
+            text="← Back",
+            font=("Arial", 12),
+            bg=self.LIGHT_BG,
+            fg=self.SECONDARY_TEXT,
+            activebackground=self.GRAY_BG,
+            relief=FLAT,
+            bd=1,
+            cursor="hand2",
+            command=self.home_screen
+        )
+        btn_back.pack(fill=X, ipady=8)
+        btn_back.bind("<Enter>", lambda e: e.widget.config(bg=self.GRAY_BG))
+        btn_back.bind("<Leave>", lambda e: e.widget.config(bg=self.LIGHT_BG))
 
     def register_user(self):
         self.clear_window()
-        ttk.Label(self.root, text="User Registration", font=("Helvetica", 16)).pack(pady=20)
-        ttk.Label(self.root, text="Username", font=("Helvetica", 14)).pack(pady=10)
-        self.entry_username = ttk.Entry(self.root)
-        self.entry_username.pack()
-        ttk.Label(self.root, text="Email", font=("Helvetica", 14)).pack(pady=10)
-        self.entry_email = ttk.Entry(self.root)
-        self.entry_email.pack()
-        ttk.Label(self.root, text="Password", font=("Helvetica", 14)).pack(pady=10)
-        self.entry_password = ttk.Entry(self.root, show="*")
-        self.entry_password.pack()
-        ttk.Label(self.root, text="Balance", font=("Helvetica", 14)).pack(pady=10)
-        self.entry_balance = ttk.Entry(self.root)
-        self.entry_balance.pack()
-        self.btn_register = ttk.Button(self.root, text="Register", command=self.process_register)
-        self.btn_register.pack(pady=20)
+        
+        main_frame = Frame(self.root, bg=self.GRAY_BG)
+        main_frame.pack(fill=BOTH, expand=YES)
+        
+        # Header
+        header_frame = Frame(main_frame, bg=self.PRIMARY_COLOR, height=100)
+        header_frame.pack(fill=X)
+        header_frame.pack_propagate(False)
+        
+        Label(
+            header_frame,
+            text="Create New Account",
+            font=("Arial", 28, "bold"),
+            bg=self.PRIMARY_COLOR,
+            fg="white"
+        ).pack(pady=30)
+        
+        # Content with scrollbar
+        content_frame = Frame(main_frame, bg=self.LIGHT_BG)
+        content_frame.pack(pady=40, padx=200, fill=BOTH, expand=YES)
+        
+        inner_frame = Frame(content_frame, bg=self.LIGHT_BG)
+        inner_frame.pack(padx=60, pady=30)
+        
+        # Username
+        Label(
+            inner_frame,
+            text="Username",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_username = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor=self.PRIMARY_COLOR
+        )
+        self.entry_username.pack(fill=X, ipady=10, pady=(0, 15))
+        
+        # Email
+        Label(
+            inner_frame,
+            text="Email Address",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_email = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor=self.PRIMARY_COLOR
+        )
+        self.entry_email.pack(fill=X, ipady=10, pady=(0, 15))
+        
+        # Password
+        Label(
+            inner_frame,
+            text="Password",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_password = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            show="●",
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor=self.PRIMARY_COLOR
+        )
+        self.entry_password.pack(fill=X, ipady=10, pady=(0, 15))
+        
+        # Balance
+        Label(
+            inner_frame,
+            text="Initial Balance (Rp)",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_balance = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor=self.PRIMARY_COLOR
+        )
+        self.entry_balance.pack(fill=X, ipady=10, pady=(0, 25))
+        
+        # Register Button
+        self.btn_register = Button(
+            inner_frame,
+            text="Register",
+            font=("Arial", 14, "bold"),
+            bg="#4A70A9",
+            fg="white",
+            activebackground="#4A70A9",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            cursor="hand2",
+            command=self.process_register
+        )
+        self.btn_register.pack(fill=X, ipady=12, pady=(0, 10))
+        self.btn_register.bind("<Enter>", lambda e: e.widget.config(bg="#389E0D"))
+        self.btn_register.bind("<Leave>", lambda e: e.widget.config(bg=self.SUCCESS_COLOR))
+        
+        # Back Button
+        btn_back = Button(
+            inner_frame,
+            text="← Back to Login",
+            font=("Arial", 12),
+            bg=self.LIGHT_BG,
+            fg=self.SECONDARY_TEXT,
+            activebackground=self.GRAY_BG,
+            relief=FLAT,
+            bd=1,
+            cursor="hand2",
+            command=self.customer
+        )
+        btn_back.pack(fill=X, ipady=8)
+        btn_back.bind("<Enter>", lambda e: e.widget.config(bg=self.GRAY_BG))
+        btn_back.bind("<Leave>", lambda e: e.widget.config(bg=self.LIGHT_BG))
 
     def process_register(self):
         username = self.entry_username.get()
@@ -125,30 +536,231 @@ class MainApp():
             
     def home_screen_admin(self):
         self.clear_window()
-        ttk.Label(self.root, text="Admin Dashboard", font=("Helvetica", 16)).pack(pady=20)
-        self.btn_logout = ttk.Button(self.root, text="Logout", command=self.logout)
-        self.btn_logout.pack(pady=20)
-        self.btn_view_products = ttk.Button(self.root, text="View Products", command=self.view_products)
-        self.btn_view_products.pack(pady=10)
-        self.btn_view_customers = ttk.Button(self.root, text="View Customers", command=self.view_customers)
-        self.btn_view_customers.pack(pady=10)
-        self.btn_add_admin = ttk.Button(self.root, text="Add Admin", command=self.add_admin)
-        self.btn_add_admin.pack(pady=10)
+        
+        main_frame = Frame(self.root, bg=self.GRAY_BG)
+        main_frame.pack(fill=BOTH, expand=YES)
+        
+        # Header
+        header_frame = Frame(main_frame, bg="#4A70A9", height=120)
+        header_frame.pack(fill=X)
+        header_frame.pack_propagate(False)
+        
+        Label(
+            header_frame,
+            text="Admin Dashboard",
+            font=("Arial", 32, "bold"),
+            bg="#4A70A9",
+            fg="white"
+        ).pack(pady=35)
+        
+        # Content
+        content_frame = Frame(main_frame, bg=self.GRAY_BG)
+        content_frame.pack(pady=25)
+        
+        # View Products Button
+        self.btn_view_products = Button(
+            content_frame,
+            text="View Products",
+            font=("Arial", 16, "bold"),
+            bg=self.PRIMARY_COLOR,
+            fg="white",
+            activebackground="#096DD9",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            width=25,
+            pady=15,
+            cursor="hand2",
+            command=self.view_products
+        )
+        self.btn_view_products.pack(pady=12)
+        self.btn_view_products.bind("<Enter>", lambda e: e.widget.config(bg="#096DD9"))
+        self.btn_view_products.bind("<Leave>", lambda e: e.widget.config(bg=self.PRIMARY_COLOR))
+        
+        # View Customers Button
+        self.btn_view_customers = Button(
+            content_frame,
+            text="View Customers",
+            font=("Arial", 16, "bold"),
+            bg="#4A70A9",
+            fg="white",
+            activebackground="#4A70A9",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            width=25,
+            pady=15,
+            cursor="hand2",
+            command=self.view_customers
+        )
+        self.btn_view_customers.pack(pady=12)
+        self.btn_view_customers.bind("<Enter>", lambda e: e.widget.config(bg="#389E0D"))
+        self.btn_view_customers.bind("<Leave>", lambda e: e.widget.config(bg=self.SUCCESS_COLOR))
+        
+        # Add Admin Button
+        self.btn_add_admin = Button(
+            content_frame,
+            text="Add Admin",
+            font=("Arial", 16, "bold"),
+            bg=self.WARNING_COLOR,
+            fg="white",
+            activebackground="#D46B08",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            width=25,
+            pady=15,
+            cursor="hand2",
+            command=self.add_admin
+        )
+        self.btn_add_admin.pack(pady=12)
+        self.btn_add_admin.bind("<Enter>", lambda e: e.widget.config(bg="#D46B08"))
+        self.btn_add_admin.bind("<Leave>", lambda e: e.widget.config(bg=self.WARNING_COLOR))
+        
+        # Logout Button
+        self.btn_logout = Button(
+            content_frame,
+            text="Logout",
+            font=("Arial", 16, "bold"),
+            bg=self.DANGER_COLOR,
+            fg="white",
+            activebackground="#CF1322",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            width=25,
+            pady=15,
+            cursor="hand2",
+            command=self.logout
+        )
+        self.btn_logout.pack(pady=12)
+        self.btn_logout.bind("<Enter>", lambda e: e.widget.config(bg="#CF1322"))
+        self.btn_logout.bind("<Leave>", lambda e: e.widget.config(bg=self.DANGER_COLOR))
 
     def add_admin(self):
         self.clear_window()
-        ttk.Label(self.root, text="Add New Admin", font=("Helvetica", 16)).pack(pady=20)
-        ttk.Label(self.root, text="Username", font=("Helvetica", 14)).pack(pady=10)
-        self.entry_username = ttk.Entry(self.root)
-        self.entry_username.pack()
-        ttk.Label(self.root, text="Email", font=("Helvetica", 14)).pack(pady=10)
-        self.entry_email = ttk.Entry(self.root)
-        self.entry_email.pack()
-        ttk.Label(self.root, text="Password", font=("Helvetica", 14)).pack(pady=10)
-        self.entry_password = ttk.Entry(self.root, show="*")
-        self.entry_password.pack()
-        self.btn_add_admin = ttk.Button(self.root, text="Add Admin", command=self.proses_add_admin)
-        self.btn_add_admin.pack(pady=20)
+        
+        main_frame = Frame(self.root, bg=self.GRAY_BG)
+        main_frame.pack(fill=BOTH, expand=YES)
+        
+        # Header
+        header_frame = Frame(main_frame, bg="#4A70A9", height=100)
+        header_frame.pack(fill=X)
+        header_frame.pack_propagate(False)
+        
+        Label(
+            header_frame,
+            text="Add New Admin",
+            font=("Arial", 28, "bold"),
+            bg="#4A70A9",
+            fg="white"
+        ).pack(pady=30)
+        
+        # Content
+        content_frame = Frame(main_frame, bg=self.LIGHT_BG)
+        content_frame.pack(pady=60, padx=200)
+        
+        inner_frame = Frame(content_frame, bg=self.LIGHT_BG)
+        inner_frame.pack(padx=60, pady=40)
+        
+        # Username
+        Label(
+            inner_frame,
+            text="Username",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_username = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor=self.WARNING_COLOR
+        )
+        self.entry_username.pack(fill=X, ipady=10, pady=(0, 15))
+        
+        # Email
+        Label(
+            inner_frame,
+            text="Email Address",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_email = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor=self.WARNING_COLOR
+        )
+        self.entry_email.pack(fill=X, ipady=10, pady=(0, 15))
+        
+        # Password
+        Label(
+            inner_frame,
+            text="Password",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_password = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            show="●",
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor=self.WARNING_COLOR
+        )
+        self.entry_password.pack(fill=X, ipady=10, pady=(0, 25))
+        
+        # Add Admin Button
+        self.btn_add_admin = Button(
+            inner_frame,
+            text="Add Admin",
+            font=("Arial", 14, "bold"),
+            bg=self.SUCCESS_COLOR,
+            fg="white",
+            activebackground="#389E0D",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            cursor="hand2",
+            command=self.proses_add_admin
+        )
+        self.btn_add_admin.pack(fill=X, ipady=12, pady=(0, 10))
+        self.btn_add_admin.bind("<Enter>", lambda e: e.widget.config(bg="#389E0D"))
+        self.btn_add_admin.bind("<Leave>", lambda e: e.widget.config(bg=self.SUCCESS_COLOR))
+        
+        # Back Button
+        btn_back = Button(
+            inner_frame,
+            text="← Back to Dashboard",
+            font=("Arial", 12),
+            bg=self.LIGHT_BG,
+            fg=self.SECONDARY_TEXT,
+            activebackground=self.GRAY_BG,
+            relief=FLAT,
+            bd=1,
+            cursor="hand2",
+            command=self.home_screen_admin
+        )
+        btn_back.pack(fill=X, ipady=8)
+        btn_back.bind("<Enter>", lambda e: e.widget.config(bg=self.GRAY_BG))
+        btn_back.bind("<Leave>", lambda e: e.widget.config(bg=self.LIGHT_BG))
 
     def proses_add_admin(self):
         username = self.entry_username.get()
@@ -169,18 +781,109 @@ class MainApp():
 
     def view_customers(self):
         self.clear_window()
-        self.tableCustomers = ttk.Treeview(self.root, columns=("No", "Username", "Email", "Balance"), show="headings")
+        
+        # Main frame
+        main_frame = Frame(self.root, bg=self.GRAY_BG)
+        main_frame.pack(fill=BOTH, expand=YES)
+        
+        # Header dengan warna #4A70A9
+        header_frame = Frame(main_frame, bg="#4A70A9", height=100)
+        header_frame.pack(fill=X)
+        header_frame.pack_propagate(False)
+        
+        Label(
+            header_frame,
+            text="Customer Management",
+            font=("Arial", 28, "bold"),
+            bg="#4A70A9",
+            fg="white"
+        ).pack(pady=30)
+        
+        # Content frame
+        content_frame = Frame(main_frame, bg=self.LIGHT_BG)
+        content_frame.pack(fill=BOTH, expand=True, padx=40, pady=30)
+        
+        # Back button
+        btn_back_frame = Frame(content_frame, bg=self.LIGHT_BG)
+        btn_back_frame.pack(fill=X, pady=(0, 15))
+        
+        btn_back = Button(
+            btn_back_frame,
+            text="← Back to Dashboard",
+            font=("Arial", 12, "bold"),
+            bg="#4A70A9",
+            fg="white",
+            activebackground="#096DD9",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            padx=20,
+            pady=10,
+            cursor="hand2",
+            command=self.home_screen_admin
+        )
+        btn_back.pack(side=LEFT)
+        btn_back.bind("<Enter>", lambda e: e.widget.config(bg="#096DD9"))
+        btn_back.bind("<Leave>", lambda e: e.widget.config(bg="#4A70A9"))
+        
+        # Table container dengan styling
+        table_container = Frame(content_frame, bg=self.LIGHT_BG, bd=2, relief=SOLID)
+        table_container.pack(fill=BOTH, expand=True)
+        
+        # Style untuk Treeview
+        style = ttk.Style()
+        style.configure(
+            "Customers.Treeview",
+            background="white",
+            foreground=self.TEXT_COLOR,
+            rowheight=40,
+            fieldbackground="white",
+            borderwidth=0
+        )
+        style.configure(
+            "Customers.Treeview.Heading",
+            background="#4A70A9",
+            foreground="white",
+            font=("Arial", 11, "bold"),
+            borderwidth=0,
+            padding=(8, 6)
+        )
+        style.map(
+            "Customers.Treeview",
+            background=[("selected", "#4A70A9")],
+            foreground=[("selected", "white")]
+        )
+        
+        # Scrollbar
+        scrollbar = ttk.Scrollbar(table_container, orient=VERTICAL)
+        
+        # Treeview
+        self.tableCustomers = ttk.Treeview(
+            table_container,
+            columns=("No", "Username", "Email", "Balance"),
+            show="headings",
+            style="Customers.Treeview",
+            yscrollcommand=scrollbar.set
+        )
+        
+        scrollbar.config(command=self.tableCustomers.yview)
+        
+        # Column headings
         self.tableCustomers.heading("No", text="ID")
         self.tableCustomers.heading("Username", text="Username")
         self.tableCustomers.heading("Email", text="Email")
         self.tableCustomers.heading("Balance", text="Balance")
- 
-        self.tableCustomers.column("No", width=50, anchor="center")
-        self.tableCustomers.column("Username", width=150, anchor="center")
-        self.tableCustomers.column("Email", width=300, anchor="center")
-        self.tableCustomers.column("Balance", width=100, anchor="center")
-
-        self.tableCustomers.pack(fill="both", expand=True)
+        
+        # Column widths
+        self.tableCustomers.column("No", width=80, anchor="center")
+        self.tableCustomers.column("Username", width=200, anchor="center")
+        self.tableCustomers.column("Email", width=350, anchor="center")
+        self.tableCustomers.column("Balance", width=150, anchor="center")
+        
+        # Pack table dan scrollbar
+        self.tableCustomers.pack(side=LEFT, fill=BOTH, expand=True)
+        scrollbar.pack(side=RIGHT, fill=Y)
+        
         self.load_data_customers()
 
     def load_data_customers(self):
@@ -192,69 +895,178 @@ class MainApp():
     
     def view_products(self):
         self.clear_window()
+        
+        # Main frame
+        main_frame = Frame(self.root, bg=self.GRAY_BG)
+        main_frame.pack(fill=BOTH, expand=YES)
+        
+        # Header dengan warna #4A70A9
+        header_frame = Frame(main_frame, bg="#4A70A9", height=100)
+        header_frame.pack(fill=X)
+        header_frame.pack_propagate(False)
+        
+        Label(
+            header_frame,
+            text="Product Management",
+            font=("Arial", 28, "bold"),
+            bg="#4A70A9",
+            fg="white"
+        ).pack(pady=30)
+        
+        # Content frame
+        content_frame = Frame(main_frame, bg=self.LIGHT_BG)
+        content_frame.pack(fill=BOTH, expand=True, padx=40, pady=30)
+        
+        # Button frame at top
+        button_top_frame = Frame(content_frame, bg=self.LIGHT_BG)
+        button_top_frame.pack(fill=X, pady=(0, 15))
+        
+        # Back button
+        btn_back = Button(
+            button_top_frame,
+            text="← Back to Dashboard",
+            font=("Arial", 12, "bold"),
+            bg="#4A70A9",
+            fg="white",
+            activebackground="#096DD9",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            padx=20,
+            pady=10,
+            cursor="hand2",
+            command=self.home_screen_admin
+        )
+        btn_back.pack(side=LEFT)
+        btn_back.bind("<Enter>", lambda e: e.widget.config(bg="#096DD9"))
+        btn_back.bind("<Leave>", lambda e: e.widget.config(bg="#4A70A9"))
+        
+        # Action buttons on the right
+        action_frame = Frame(button_top_frame, bg=self.LIGHT_BG)
+        action_frame.pack(side=RIGHT)
+        
+        self.btn_add_product = Button(
+            action_frame,
+            text="➕ Add Product",
+            font=("Arial", 11, "bold"),
+            bg=self.SUCCESS_COLOR,
+            fg="white",
+            activebackground="#389E0D",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            padx=15,
+            pady=8,
+            cursor="hand2",
+            command=self.add_product
+        )
+        self.btn_add_product.pack(side=LEFT, padx=5)
+        self.btn_add_product.bind("<Enter>", lambda e: e.widget.config(bg="#389E0D"))
+        self.btn_add_product.bind("<Leave>", lambda e: e.widget.config(bg=self.SUCCESS_COLOR))
+        
+        self.btn_edit = Button(
+            action_frame,
+            text="Edit Selected",
+            font=("Arial", 11, "bold"),
+            bg=self.WARNING_COLOR,
+            fg="white",
+            activebackground="#D46B08",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            padx=15,
+            pady=8,
+            cursor="hand2",
+            command=self.edit_selected_product
+        )
+        self.btn_edit.pack(side=LEFT, padx=5)
+        self.btn_edit.bind("<Enter>", lambda e: e.widget.config(bg="#D46B08"))
+        self.btn_edit.bind("<Leave>", lambda e: e.widget.config(bg=self.WARNING_COLOR))
+        
+        self.btn_delete = Button(
+            action_frame,
+            text="Delete Selected",
+            font=("Arial", 11, "bold"),
+            bg=self.DANGER_COLOR,
+            fg="white",
+            activebackground="#CF1322",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            padx=15,
+            pady=8,
+            cursor="hand2",
+            command=self.delete_selected_product
+        )
+        self.btn_delete.pack(side=LEFT, padx=5)
+        self.btn_delete.bind("<Enter>", lambda e: e.widget.config(bg="#CF1322"))
+        self.btn_delete.bind("<Leave>", lambda e: e.widget.config(bg=self.DANGER_COLOR))
+        
+        # Table container dengan styling
+        table_container = Frame(content_frame, bg=self.LIGHT_BG, bd=2, relief=SOLID)
+        table_container.pack(fill=BOTH, expand=True)
+        
+        # Style untuk Treeview
         style = ttk.Style()
-
-        table_frame = ttk.Frame(self.root)
-        table_frame.pack(fill=BOTH, expand=True, padx=10, pady=5)
-
-        scrollbar_y = ttk.Scrollbar(table_frame, orient=VERTICAL)
-
         style.configure(
-            "Custom.Treeview",
-            rowheight=70,      
-            padding=(5, 3)     
+            "Products.Treeview",
+            background="white",
+            foreground=self.TEXT_COLOR,
+            rowheight=70,
+            fieldbackground="white",
+            borderwidth=0
         )
-
         style.configure(
-            "Custom.Treeview.Heading",
-            padding=(8, 6)     
+            "Products.Treeview.Heading",
+            background="#4A70A9",
+            foreground="white",
+            font=("Arial", 11, "bold"),
+            borderwidth=0,
+            padding=(8, 6)
         )
-
-        self.image_refs = []
-       
-        ttk.Label(self.root, text="Product List", font=("Helvetica", 14)).pack(pady=10)
+        style.map(
+            "Products.Treeview",
+            background=[("selected", "#4A70A9")],
+            foreground=[("selected", "white")]
+        )
         
-        top_frame = ttk.Frame(self.root)
-        top_frame.pack(fill=X, padx=20)
-
-        self.table = ttk.Treeview(self.root, columns=("id", "View", "Name", "Description", "Price", "Stock"), show="headings", style="Custom.Treeview",     yscrollcommand=scrollbar_y.set)
+        # Scrollbar
+        scrollbar_y = ttk.Scrollbar(table_container, orient=VERTICAL)
         
-        # Hubungkan scrollbar ke treeview
+        # Treeview
+        self.table = ttk.Treeview(
+            table_container,
+            columns=("id", "View", "Name", "Description", "Price", "Stock"),
+            show="headings",
+            style="Products.Treeview",
+            yscrollcommand=scrollbar_y.set
+        )
+        
         scrollbar_y.config(command=self.table.yview)
-
-        # Layout
-        self.table.pack(side=LEFT, fill=BOTH, expand=True)
-        scrollbar_y.pack(side=RIGHT, fill=Y)
-
+        
+        # Column headings
         self.table.heading("id", text="ID")
         self.table.heading("View", text="Image")
         self.table.heading("Name", text="Product Name")
         self.table.heading("Description", text="Description")
         self.table.heading("Price", text="Price")
         self.table.heading("Stock", text="Stock")
- 
+        
+        # Column widths
         self.table.column("id", width=50, anchor="center")
         self.table.column("View", width=70, anchor="center")
         self.table.column("Name", width=150, anchor="center")
         self.table.column("Description", width=300, anchor="center")
         self.table.column("Price", width=100, anchor="center")
         self.table.column("Stock", width=100, anchor="center")
-
+        
         self.table.bind("<ButtonRelease-1>", self.on_table_click)
-
-
-        self.table.pack(fill="both", expand=True)
-
-        self.btn_add_product = ttk.Button(self.root, text="Add Product", command=self.add_product)
-        self.btn_add_product.pack(pady=5)
-
-        self.btn_edit = ttk.Button(self.root, text="Edit Selected", command=self.edit_selected_product)
-        self.btn_edit.pack(pady=5)
-
-        self.btn_delete = ttk.Button(self.root, text="Delete Selected", command=self.delete_selected_product)
-        self.btn_delete.pack(pady=5)
-
-
+        
+        # Pack table dan scrollbar
+        self.table.pack(side=LEFT, fill=BOTH, expand=True)
+        scrollbar_y.pack(side=RIGHT, fill=Y)
+        
+        self.image_refs = []
         self.load_table_data()
 
     def load_table_data(self):
@@ -308,23 +1120,170 @@ class MainApp():
     
     def add_product(self):
         self.clear_window()
-        ttk.Label(self.root, text="Name", font=("Helvetica", 14)).pack(pady=10)
-        self.entry_name = ttk.Entry(self.root)
-        self.entry_name.pack(pady=20)
-        ttk.Label(self.root, text="Description", font=("Helvetica", 14)).pack(pady=10)
-        self.entry_description = ttk.Entry(self.root)
-        self.entry_description.pack()
-        ttk.Label(self.root, text="Image URL", font=("Helvetica", 14)).pack(pady=10)
-        self.entry_image_url = ttk.Entry(self.root)
-        self.entry_image_url.pack()
-        ttk.Label(self.root, text="Price", font=("Helvetica", 14)).pack(pady=10)
-        self.entry_price = ttk.Entry(self.root)
-        self.entry_price.pack(pady=20)
-        ttk.Label(self.root, text="Stock", font=("Helvetica", 14)).pack(pady=10)
-        self.entry_stock = ttk.Entry(self.root)
-        self.entry_stock.pack(pady=20)
-        self.btn_add_product = ttk.Button(self.root, text="Add Product", command=self.proses_add_product)
-        self.btn_add_product.pack(pady=10)
+        
+        # Main frame
+        main_frame = Frame(self.root, bg=self.GRAY_BG)
+        main_frame.pack(fill=BOTH, expand=YES)
+        
+        # Header dengan warna #4A70A9
+        header_frame = Frame(main_frame, bg="#4A70A9", height=100)
+        header_frame.pack(fill=X)
+        header_frame.pack_propagate(False)
+        
+        Label(
+            header_frame,
+            text="Add New Product",
+            font=("Arial", 28, "bold"),
+            bg="#4A70A9",
+            fg="white"
+        ).pack(pady=30)
+        
+        # Content frame
+        content_frame = Frame(main_frame, bg=self.LIGHT_BG)
+        content_frame.pack(pady=60, padx=200)
+        
+        inner_frame = Frame(content_frame, bg=self.LIGHT_BG)
+        inner_frame.pack(padx=60, pady=40)
+        
+        # Product Name
+        Label(
+            inner_frame,
+            text="Product Name",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_name = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor="#4A70A9"
+        )
+        self.entry_name.pack(fill=X, ipady=10, pady=(0, 15))
+        
+        # Description
+        Label(
+            inner_frame,
+            text="Description",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_description = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor="#4A70A9"
+        )
+        self.entry_description.pack(fill=X, ipady=10, pady=(0, 15))
+        
+        # Image URL
+        Label(
+            inner_frame,
+            text="Image URL",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_image_url = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor="#4A70A9"
+        )
+        self.entry_image_url.pack(fill=X, ipady=10, pady=(0, 15))
+        
+        # Price
+        Label(
+            inner_frame,
+            text="Price (Rp)",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_price = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor="#4A70A9"
+        )
+        self.entry_price.pack(fill=X, ipady=10, pady=(0, 15))
+        
+        # Stock
+        Label(
+            inner_frame,
+            text="Stock Quantity",
+            font=("Arial", 12, "bold"),
+            bg=self.LIGHT_BG,
+            fg=self.TEXT_COLOR,
+            anchor=W
+        ).pack(fill=X, pady=(0, 5))
+        
+        self.entry_stock = Entry(
+            inner_frame,
+            font=("Arial", 13),
+            bd=1,
+            relief=SOLID,
+            highlightthickness=2,
+            highlightbackground="#D9D9D9",
+            highlightcolor="#4A70A9"
+        )
+        self.entry_stock.pack(fill=X, ipady=10, pady=(0, 25))
+        
+        # Add Product Button
+        self.btn_add_product = Button(
+            inner_frame,
+            text="Add Product",
+            font=("Arial", 14, "bold"),
+            bg=self.SUCCESS_COLOR,
+            fg="white",
+            activebackground="#389E0D",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            cursor="hand2",
+            command=self.proses_add_product
+        )
+        self.btn_add_product.pack(fill=X, ipady=12, pady=(0, 10))
+        self.btn_add_product.bind("<Enter>", lambda e: e.widget.config(bg="#389E0D"))
+        self.btn_add_product.bind("<Leave>", lambda e: e.widget.config(bg=self.SUCCESS_COLOR))
+        
+        # Back Button
+        btn_back = Button(
+            inner_frame,
+            text="← Back to Products",
+            font=("Arial", 12),
+            bg=self.LIGHT_BG,
+            fg=self.SECONDARY_TEXT,
+            activebackground=self.GRAY_BG,
+            relief=FLAT,
+            bd=1,
+            cursor="hand2",
+            command=self.view_products
+        )
+        btn_back.pack(fill=X, ipady=8)
+        btn_back.bind("<Enter>", lambda e: e.widget.config(bg=self.GRAY_BG))
+        btn_back.bind("<Leave>", lambda e: e.widget.config(bg=self.LIGHT_BG))
 
     def proses_add_product(self):
         name = self.entry_name.get()
@@ -375,29 +1334,175 @@ class MainApp():
         
         if product_values:
             self.clear_window()
-            ttk.Label(self.root, text="Edit Product", font=("Helvetica", 16)).pack(pady=20)
-            ttk.Label(self.root, text="Name", font=("Helvetica", 14)).pack(pady=10)
-            self.entry_name = ttk.Entry(self.root)
-            self.entry_name.insert(0, product_values[1])
-            self.entry_name.pack(pady=20)
-            ttk.Label(self.root, text="Description", font=("Helvetica", 14)).pack(pady=10)
-            self.entry_description = ttk.Entry(self.root)
-            self.entry_description.insert(0, product_values[2])
-            self.entry_description.pack()
-            ttk.Label(self.root, text="Image URL", font=("Helvetica", 14)).pack(pady=10)
-            self.entry_image_url = ttk.Entry(self.root)
+            
+            # Main frame
+            main_frame = Frame(self.root, bg=self.GRAY_BG)
+            main_frame.pack(fill=BOTH, expand=YES)
+            
+            # Header dengan warna #4A70A9
+            header_frame = Frame(main_frame, bg="#4A70A9", height=100)
+            header_frame.pack(fill=X)
+            header_frame.pack_propagate(False)
+            
+            Label(
+                header_frame,
+                text="✏️ Edit Product",
+                font=("Arial", 28, "bold"),
+                bg="#4A70A9",
+                fg="white"
+            ).pack(pady=30)
+            
+            # Content frame
+            content_frame = Frame(main_frame, bg=self.LIGHT_BG)
+            content_frame.pack(pady=60, padx=200)
+            
+            inner_frame = Frame(content_frame, bg=self.LIGHT_BG)
+            inner_frame.pack(padx=60, pady=40)
+            
+            # Product Name
+            Label(
+                inner_frame,
+                text="Product Name",
+                font=("Arial", 12, "bold"),
+                bg=self.LIGHT_BG,
+                fg=self.TEXT_COLOR,
+                anchor=W
+            ).pack(fill=X, pady=(0, 5))
+            
+            self.entry_name = Entry(
+                inner_frame,
+                font=("Arial", 13),
+                bd=1,
+                relief=SOLID,
+                highlightthickness=2,
+                highlightbackground="#D9D9D9",
+                highlightcolor="#4A70A9"
+            )
+            self.entry_name.insert(0, product_values[2])
+            self.entry_name.pack(fill=X, ipady=10, pady=(0, 15))
+            
+            # Description
+            Label(
+                inner_frame,
+                text="Description",
+                font=("Arial", 12, "bold"),
+                bg=self.LIGHT_BG,
+                fg=self.TEXT_COLOR,
+                anchor=W
+            ).pack(fill=X, pady=(0, 5))
+            
+            self.entry_description = Entry(
+                inner_frame,
+                font=("Arial", 13),
+                bd=1,
+                relief=SOLID,
+                highlightthickness=2,
+                highlightbackground="#D9D9D9",
+                highlightcolor="#4A70A9"
+            )
+            self.entry_description.insert(0, product_values[3])
+            self.entry_description.pack(fill=X, ipady=10, pady=(0, 15))
+            
+            # Image URL
+            Label(
+                inner_frame,
+                text="Image URL",
+                font=("Arial", 12, "bold"),
+                bg=self.LIGHT_BG,
+                fg=self.TEXT_COLOR,
+                anchor=W
+            ).pack(fill=X, pady=(0, 5))
+            
+            self.entry_image_url = Entry(
+                inner_frame,
+                font=("Arial", 13),
+                bd=1,
+                relief=SOLID,
+                highlightthickness=2,
+                highlightbackground="#D9D9D9",
+                highlightcolor="#4A70A9"
+            )
             self.entry_image_url.insert(0, image)
-            self.entry_image_url.pack(pady=20)
-            ttk.Label(self.root, text="Price", font=("Helvetica", 14)).pack(pady=10)
-            self.entry_price = ttk.Entry(self.root)
-            self.entry_price.insert(0, product_values[3])
-            self.entry_price.pack(pady=20)
-            ttk.Label(self.root, text="Stock", font=("Helvetica", 14)).pack(pady=10)
-            self.entry_stock = ttk.Entry(self.root)
-            self.entry_stock.insert(0, product_values[4])
-            self.entry_stock.pack(pady=20)
-            self.btn_update_product = ttk.Button(self.root, text="Update Product", command=lambda: self.proses_update_product(int(product_values[0])))
-            self.btn_update_product.pack(pady=10)
+            self.entry_image_url.pack(fill=X, ipady=10, pady=(0, 15))
+            
+            # Price
+            Label(
+                inner_frame,
+                text="Price (Rp)",
+                font=("Arial", 12, "bold"),
+                bg=self.LIGHT_BG,
+                fg=self.TEXT_COLOR,
+                anchor=W
+            ).pack(fill=X, pady=(0, 5))
+            
+            self.entry_price = Entry(
+                inner_frame,
+                font=("Arial", 13),
+                bd=1,
+                relief=SOLID,
+                highlightthickness=2,
+                highlightbackground="#D9D9D9",
+                highlightcolor="#4A70A9"
+            )
+            self.entry_price.insert(0, product_values[4])
+            self.entry_price.pack(fill=X, ipady=10, pady=(0, 15))
+            
+            # Stock
+            Label(
+                inner_frame,
+                text="Stock Quantity",
+                font=("Arial", 12, "bold"),
+                bg=self.LIGHT_BG,
+                fg=self.TEXT_COLOR,
+                anchor=W
+            ).pack(fill=X, pady=(0, 5))
+            
+            self.entry_stock = Entry(
+                inner_frame,
+                font=("Arial", 13),
+                bd=1,
+                relief=SOLID,
+                highlightthickness=2,
+                highlightbackground="#D9D9D9",
+                highlightcolor="#4A70A9"
+            )
+            self.entry_stock.insert(0, product_values[5])
+            self.entry_stock.pack(fill=X, ipady=10, pady=(0, 25))
+            
+            # Update Product Button
+            self.btn_update_product = Button(
+                inner_frame,
+                text="Update Product",
+                font=("Arial", 14, "bold"),
+                bg=self.WARNING_COLOR,
+                fg="white",
+                activebackground="#D46B08",
+                activeforeground="white",
+                relief=FLAT,
+                bd=0,
+                cursor="hand2",
+                command=lambda: self.proses_update_product(int(product_values[0]))
+            )
+            self.btn_update_product.pack(fill=X, ipady=12, pady=(0, 10))
+            self.btn_update_product.bind("<Enter>", lambda e: e.widget.config(bg="#D46B08"))
+            self.btn_update_product.bind("<Leave>", lambda e: e.widget.config(bg=self.WARNING_COLOR))
+            
+            # Back Button
+            btn_back = Button(
+                inner_frame,
+                text="← Back to Products",
+                font=("Arial", 12),
+                bg=self.LIGHT_BG,
+                fg=self.SECONDARY_TEXT,
+                activebackground=self.GRAY_BG,
+                relief=FLAT,
+                bd=1,
+                cursor="hand2",
+                command=self.view_products
+            )
+            btn_back.pack(fill=X, ipady=8)
+            btn_back.bind("<Enter>", lambda e: e.widget.config(bg=self.GRAY_BG))
+            btn_back.bind("<Leave>", lambda e: e.widget.config(bg=self.LIGHT_BG))
 
     def proses_update_product(self, id):
         name = self.entry_name.get()
@@ -468,7 +1573,7 @@ class MainApp():
         body = Frame(root)
         body.pack(fill="both", expand=True)
 
-        sidebar = Frame(body, width=250, bg="#d4eded")
+        sidebar = Frame(body, width=250, bg="#4A70A9")
         sidebar.pack(side="left", fill="y")
 
         product_area = Frame(body, bg="white")
@@ -494,7 +1599,9 @@ class MainApp():
            font=("Arial", 14, "bold"),
            bg="#69a7a7",
            fg="black",
-           height=2).pack(fill="x", padx=10, pady=20)
+           height=2,
+           command=self.view_history
+           ).pack(fill="x", padx=10, pady=20)
         
         Button(
             sidebar,
@@ -542,6 +1649,126 @@ class MainApp():
             if col == 5:
                 col = 0
                 row += 1
+
+    def view_history(self):
+        self.clear_window()
+        
+        # Main frame
+        main_frame = Frame(self.root, bg=self.GRAY_BG)
+        main_frame.pack(fill=BOTH, expand=YES)
+        
+        # Header dengan warna #4A70A9
+        header_frame = Frame(main_frame, bg="#4A70A9", height=100)
+        header_frame.pack(fill=X)
+        header_frame.pack_propagate(False)
+        
+        Label(
+            header_frame,
+            text="Purchase History",
+            font=("Arial", 28, "bold"),
+            bg="#4A70A9",
+            fg="white"
+        ).pack(pady=30)
+        
+        # Content frame
+        content_frame = Frame(main_frame, bg=self.LIGHT_BG)
+        content_frame.pack(fill=BOTH, expand=True, padx=40, pady=30)
+        
+        # Back button
+        btn_back_frame = Frame(content_frame, bg=self.LIGHT_BG)
+        btn_back_frame.pack(fill=X, pady=(0, 15))
+        
+        btn_back = Button(
+            btn_back_frame,
+            text="← Back to Home",
+            font=("Arial", 12, "bold"),
+            bg="#4A70A9",
+            fg="white",
+            activebackground="#096DD9",
+            activeforeground="white",
+            relief=FLAT,
+            bd=0,
+            padx=20,
+            pady=10,
+            cursor="hand2",
+            command=self.home_screen_customer
+        )
+        btn_back.pack(side=LEFT)
+        btn_back.bind("<Enter>", lambda e: e.widget.config(bg="#096DD9"))
+        btn_back.bind("<Leave>", lambda e: e.widget.config(bg="#4A70A9"))
+        
+        # Table frame dengan styling
+        table_container = Frame(content_frame, bg=self.LIGHT_BG, bd=2, relief=SOLID)
+        table_container.pack(fill=BOTH, expand=True)
+        
+        # Style untuk Treeview
+        style = ttk.Style()
+        style.configure(
+            "History.Treeview",
+            background="white",
+            foreground=self.TEXT_COLOR,
+            rowheight=35,
+            fieldbackground="white",
+            borderwidth=0
+        )
+        style.configure(
+            "History.Treeview.Heading",
+            background="#4A70A9",
+            foreground="white",
+            font=("Arial", 11, "bold"),
+            borderwidth=0
+        )
+        style.map(
+            "History.Treeview",
+            background=[("selected", "#4A70A9")],
+            foreground=[("selected", "white")]
+        )
+        
+        # Scrollbar
+        scrollbar = ttk.Scrollbar(table_container, orient=VERTICAL)
+        
+        # Treeview
+        self.tableHistory = ttk.Treeview(
+            table_container,
+            columns=("No", "TransactionDate", "Products Name", "Total Price"),
+            show="headings",
+            style="History.Treeview",
+            yscrollcommand=scrollbar.set
+        )
+        
+        scrollbar.config(command=self.tableHistory.yview)
+        
+        # Column headings
+        self.tableHistory.heading("No", text="No")
+        self.tableHistory.heading("TransactionDate", text="Transaction Date")
+        self.tableHistory.heading("Products Name", text="Product Name")
+        self.tableHistory.heading("Total Price", text="Total Price")
+        
+        # Column widths
+        self.tableHistory.column("No", width=80, anchor="center")
+        self.tableHistory.column("TransactionDate", width=200, anchor="center")
+        self.tableHistory.column("Products Name", width=300, anchor=W)
+        self.tableHistory.column("Total Price", width=150, anchor="center")
+        
+        # Pack table dan scrollbar
+        self.tableHistory.pack(side=LEFT, fill=BOTH, expand=True)
+        scrollbar.pack(side=RIGHT, fill=Y)
+        
+        self.load_data_history()
+
+    def load_data_history(self):
+        self.dataHistory = cart_services.getAllCartsByUserId(self.current_customer_id)
+        i = 1
+        for history in self.dataHistory:
+            print(history)
+            if history[1] != None:
+                data = cart_detail_service.fetchCartDetailsByCartId(history[0])
+                for item in data:
+                    total_price = item[2] * item[3]
+                    self.tableHistory.insert("", "end", values=(i, history[1], item[1], total_price))
+                    i += 1
+      
+        
 
     def add_to_cart_process(self, sellerId, name, price, image_url):
         checkCart = cart_services.checkCartActive(self.current_customer_id, sellerId)
@@ -1125,5 +2352,6 @@ class MainApp():
 
 
 root = Tk()
+root.configure(bg="#F9F8F6")
 app = MainApp(root)
 root.mainloop()
