@@ -551,7 +551,7 @@ class MainApp():
         password = self.entry_password.get()
         self.login = user_services.login_admin(email, password)
 
-        self.current_admin_id = self.login[0]
+        
         
         if (self.login):
             messagebox.showinfo("Info", "Login Successfully!")
@@ -560,6 +560,8 @@ class MainApp():
             self.home_screen_admin()
         else:
             messagebox.showerror("Error", "Email or Password is Wrong")
+
+        self.current_admin_id = self.login[0]
             
     def home_screen_admin(self):
         self.clear_window()
