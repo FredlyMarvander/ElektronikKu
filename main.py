@@ -2204,7 +2204,7 @@ class MainApp():
 
             def center_window(event):
                 self.canvas_cart.configure(scrollregion=self.canvas_cart.bbox("all"))
-                # Center horizontally
+              
                 canvas_width = self.canvas_cart.winfo_width()
                 if canvas_width > 1:
                     self.canvas_cart.coords(self.cart_window_id, canvas_width // 2, 0)
