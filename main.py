@@ -2204,12 +2204,12 @@ class MainApp():
             self.scrollbar_cart = Scrollbar(content_frame, orient="vertical", command=self.canvas_cart.yview)
             self.scrollable_cart_frame = Frame(self.canvas_cart, bg="#f5f5f5")
 
-            def center_window(event):
+            def center_window(event=None):
                 self.canvas_cart.configure(scrollregion=self.canvas_cart.bbox("all"))
-              
                 canvas_width = self.canvas_cart.winfo_width()
-                if canvas_width > 1:
-                    self.canvas_cart.coords(self.cart_window_id, canvas_width // 2, 0)
+
+               
+                self.canvas_cart.itemconfig(self.cart_window_id, width=canvas_width)
 
             self.scrollable_cart_frame.bind("<Configure>", center_window)
 
@@ -2220,7 +2220,9 @@ class MainApp():
             self.scrollbar_cart.pack(side="right", fill="y")
             
             # Bind canvas resize untuk re-center
-            self.canvas_cart.bind("<Configure>", lambda e: center_window(e) if self.canvas_cart.winfo_width() > 1 else None)
+            
+            self.scrollable_cart_frame.bind("<Configure>", center_window)
+            self.canvas_cart.bind("<Configure>", center_window)
 
             self.total = self.render_cart()
 
